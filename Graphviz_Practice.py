@@ -1,16 +1,22 @@
-# This is a sample Python script.
+from sklearn.tree import DecisionTreeClassifier, export_graphviz
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+import graphviz as gv
+import warnings
+warnings.filterwarnings("ignore")
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+# Create DecisionTree Classifier
+dt_clf = DecisionTreeClassifier(random_state=156)
 
+# load iris data, and create train and test subsets
+iris_data = load_iris()
+X_train, X_test, y_train, y_test = train_test_split(iris_data.data, iris_data.target, test_size=0.2, random_state=11)
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+# Execute DecisionTreeClassifier Training
+dt_clf.fit(X_train, y_train)
 
+export_graphviz(dt_clf, out_file="tree.dot", class_names=iris_data.target_names, feature_names=iris_data.feature_names, impurity=True, filled=True)
+with open("tree.dot") as f:
+    dot_graph = f.read()
+gv.Source(dot_graph).view()
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
